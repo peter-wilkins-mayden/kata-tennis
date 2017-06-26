@@ -1,9 +1,9 @@
 module Tests exposing (all)
 
-import Test exposing (..)
-import Expect
 import CustomFuzzers
+import Expect
 import Tennis exposing (..)
+import Test exposing (..)
 
 
 -- Helper functions
@@ -105,7 +105,7 @@ transitionTests =
                             |> Maybe.map (\nextPoint -> { current | otherPlayerPoint = nextPoint })
                             |> Maybe.map Forty
                 in
-                    Expect.equal expected (Just actual)
+                Expect.equal expected (Just actual)
         , fuzz2
             CustomFuzzers.pointsData
             CustomFuzzers.player
@@ -122,7 +122,7 @@ transitionTests =
                     expected =
                         Forty { player = winner, otherPlayerPoint = pointFor (other winner) current }
                 in
-                    Expect.equal expected actual
+                Expect.equal expected actual
         , fuzz3
             CustomFuzzers.pointsData
             CustomFuzzers.player
@@ -146,7 +146,7 @@ transitionTests =
                         expectedPlayerPoint
                             |> Maybe.map (\point -> Points <| pointTo winner point current)
                 in
-                    Expect.equal expected (Just actual)
+                Expect.equal expected (Just actual)
         , fuzz CustomFuzzers.player "Given game is over it stays over" <|
             \winner ->
                 let
@@ -156,7 +156,7 @@ transitionTests =
                     expected =
                         Game winner
                 in
-                    Expect.equal expected actual
+                Expect.equal expected actual
         ]
 
 
@@ -171,23 +171,23 @@ scoreTests =
                     actual =
                         score winner current
                 in
-                    Expect.true "Expected the score function not to crash" True
+                Expect.true "Expected the score function not to crash" True
         , fuzz CustomFuzzers.wins "A game with less than four balls isn't over" <|
             \wins ->
                 let
                     actual =
                         List.take 3 wins |> scoreList
                 in
-                    Expect.true "Expected the value not to be of Game constructor" <|
-                        (actual |> (not << isGame))
+                Expect.true "Expected the value not to be of Game constructor" <|
+                    (actual |> (not << isGame))
         , fuzz CustomFuzzers.wins "A game with less than six balls can't be Deuce" <|
             \wins ->
                 let
                     actual =
                         List.take 5 wins |> scoreList
                 in
-                    Expect.true "Expected the value not to be of Deuce constructor" <|
-                        (actual |> (not << isDeuce))
+                Expect.true "Expected the value not to be of Deuce constructor" <|
+                    (actual |> (not << isDeuce))
         , fuzz
             CustomFuzzers.wins
             "A game with less than seven balls can't have any player with advantage"
@@ -197,8 +197,8 @@ scoreTests =
                     actual =
                         List.take 6 wins |> scoreList
                 in
-                    Expect.true "Expected the value not to be of Advantage constructor" <|
-                        (actual |> (not << isAdvantage))
+                Expect.true "Expected the value not to be of Advantage constructor" <|
+                    (actual |> (not << isAdvantage))
         , fuzz
             (CustomFuzzers.moreThanNWins 4)
             "A game with more than four balls can't be Points"
@@ -208,8 +208,8 @@ scoreTests =
                     actual =
                         scoreList wins
                 in
-                    Expect.true "Expected the value not to be of Points constructor" <|
-                        (actual |> (not << isPoints))
+                Expect.true "Expected the value not to be of Points constructor" <|
+                    (actual |> (not << isPoints))
         , fuzz
             (CustomFuzzers.moreThanNWins 5)
             "A game with more than five balls can't be Forty"
@@ -219,8 +219,8 @@ scoreTests =
                     actual =
                         scoreList wins
                 in
-                    Expect.true "Expected the value not to be of Forty constructor" <|
-                        (actual |> (not << isForty))
+                Expect.true "Expected the value not to be of Forty constructor" <|
+                    (actual |> (not << isForty))
         , fuzz
             CustomFuzzers.player
             "A game where one player wins all balls is over in four balls"
@@ -233,15 +233,15 @@ scoreTests =
                     actual =
                         scoreList fourWins
                 in
-                    Expect.equal (Game winner) actual
+                Expect.equal (Game winner) actual
         , fuzz CustomFuzzers.alternateWins "A game where players alternate never ends" <|
             \alternateWins ->
                 let
                     actual =
                         scoreList alternateWins
                 in
-                    Expect.true "Expected the value not to be of Game constructor" <|
-                        (actual |> (not << isGame))
+                Expect.true "Expected the value not to be of Game constructor" <|
+                    (actual |> (not << isGame))
         ]
 
 

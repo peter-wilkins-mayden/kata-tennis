@@ -109,7 +109,7 @@ scoreWhenForty winner current =
     if current.player == winner then
         Game winner
     else
-        case (incrementPoint current.otherPlayerPoint) of
+        case incrementPoint current.otherPlayerPoint of
             Just point ->
                 Forty { current | otherPlayerPoint = point }
 
@@ -123,15 +123,15 @@ scoreWhenPoints winner current =
         nextWinnerPoint =
             incrementPoint (pointFor winner current)
     in
-        case nextWinnerPoint of
-            Just point ->
-                Points <| pointTo winner point current
+    case nextWinnerPoint of
+        Just point ->
+            Points <| pointTo winner point current
 
-            Nothing ->
-                Forty
-                    { player = winner
-                    , otherPlayerPoint = pointFor (other winner) current
-                    }
+        Nothing ->
+            Forty
+                { player = winner
+                , otherPlayerPoint = pointFor (other winner) current
+                }
 
 
 scoreWhenGame : Player -> Score
@@ -185,19 +185,19 @@ scoreToString playerOneName playerTwoName score =
     case score of
         Points points ->
             if points.playerOnePoint == points.playerTwoPoint then
-                (pointToString points.playerOnePoint) ++ "-all"
+                pointToString points.playerOnePoint ++ "-all"
             else
-                (pointToString points.playerOnePoint) ++ "-" ++ (pointToString points.playerTwoPoint)
+                pointToString points.playerOnePoint ++ "-" ++ pointToString points.playerTwoPoint
 
         Forty forty ->
             let
                 other =
                     pointToString forty.otherPlayerPoint
             in
-                if forty.player == PlayerOne then
-                    "40-" ++ other
-                else
-                    other ++ "-40"
+            if forty.player == PlayerOne then
+                "40-" ++ other
+            else
+                other ++ "-40"
 
         Deuce ->
             "deuce"
