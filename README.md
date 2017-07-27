@@ -24,3 +24,5 @@ Each article from the series has its own commit:
 ## Running tests
 
 To run tests, install [node-test-runner](https://github.com/rtfeldman/node-test-runner), go to the root of the repo and call `elm test` from the terminal.
+
+test
